@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>759</width>
-    <height>608</height>
+    <height>626</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -261,6 +261,22 @@
     </property>
     <property name="text">
      <string>Также нарезать картинки по 2к в высоту</string>
+    </property>
+    <property name="checked">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="cut_clear">
+    <property name="geometry">
+     <rect>
+      <x>510</x>
+      <y>600</y>
+      <width>251</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Удалить исходные картинки</string>
     </property>
     <property name="checked">
      <bool>true</bool>

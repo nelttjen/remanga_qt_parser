@@ -13,3 +13,6 @@ class Settings:
     id_column = 5
 
     endpoint = 'https://api.remanga.org/api/titles/chapters/'
+
+    VERSION = 1.0
+    TITLE = 'ReManga parser'

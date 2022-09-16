@@ -19,7 +19,7 @@ class DownloadQueueThread(QThread):
     error_chapter = pyqtSignal(str)
     done = pyqtSignal()
 
-    def __init__(self, parent, queue, selected, folder, cut_mode=False, session=requests.Session()):
+    def __init__(self, parent, queue, selected, folder, item_name, cut_mode=False, delete_after=False, session=requests.Session()):
         super(DownloadQueueThread, self).__init__(parent)
         self.queue = queue
         self.actual_queue = {}
@@ -28,18 +28,20 @@ class DownloadQueueThread(QThread):
         self.selected = selected
         self.folder = folder
 
+        self.title_name = item_name
         self.cut_mode = cut_mode
+        self.delete_after = delete_after
         self.folders = []
 
         self.threads = []
 
     def run(self) -> None:
         self.init.emit()
-        cur_folder = self.folder + '/' + self.selected
+        cur_folder = self.folder + f'/{self.title_name.replace(" ", "_").lower()}_{self.selected}'
         os.mkdir(cur_folder) if not os.path.exists(cur_folder) else None
         for item in self.queue:
             self.init_chapter.emit(str(item[1]))
-            item_folder = f'{cur_folder}/{item[1]}'
+            item_folder = f'{cur_folder}/{item[1]}_{self.title_name.replace(" ", "_").lower()}'
             shutil.rmtree(item_folder) if os.path.exists(item_folder) else None
             os.mkdir(item_folder)
             self.folders.append(item_folder)
@@ -117,4 +119,12 @@ class DownloadQueueThread(QThread):
                     count += 1
                     crop_image.save(cut_img[1] + f'/cut/{count}.jpg')
                 shutil.rmtree(item + '/cut/temp') if os.path.exists(item + '/cut/temp') else None
+                if self.delete_after:
+                    items = os.listdir(item)
+                    for image in items:
+                        if image != 'cut':
+                            try:
+                                os.remove(item + f'/{image}')
+                            except Exception as e:
+                                continue
         self.done.emit()

@@ -1,6 +1,7 @@
 import requests
 from PyQt5 import uic
 from PyQt5.QtCore import Qt, QThread
+from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QDialog
 
 from . import show_error
@@ -25,6 +26,9 @@ class SelectChapters(QDialog):
         self.fetch_chapters()
 
     def initUi(self):
+        self.setWindowTitle('Выбор главы')
+        self.setWindowIcon(QIcon('ui/icon.ico'))
+
         self.select_info.setText(' '.join((self.selected, self.selected_addon)))
 
         self.confirm_btn.clicked.connect(self.accept)

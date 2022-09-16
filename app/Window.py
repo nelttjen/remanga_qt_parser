@@ -4,11 +4,12 @@ import os
 import requests
 
 from PyQt5 import uic
+from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QMainWindow, QFileDialog
 
 from . import show_error, show_info, SelectChapters
 from .threads import DownloadQueueThread
-from utils import TableHandler, save_setts
+from utils import TableHandler, save_setts, Settings
 
 
 class Window(QMainWindow):
@@ -42,6 +43,9 @@ class Window(QMainWindow):
             self.main_list.addItem(f'{item[0]}: ({item[2]}) - {item[1]}   ---   {item[3]}')
 
     def initUi(self):
+        self.setWindowTitle(f'{Settings.TITLE} v{Settings.VERSION}')
+        self.setWindowIcon(QIcon('ui/icon.ico'))
+
         self.select_chapters.clicked.connect(self.select_chapters_def)
         self.folder_btn.clicked.connect(self.set_folder)
         self.download_chapters.clicked.connect(self.download_thread)
@@ -107,8 +111,9 @@ class Window(QMainWindow):
             show_error(self, 'Место загрузки не выбрано')
             return
         self.is_running = True
-        thread = DownloadQueueThread(self, self.download_queue, self.selected, self.download_folder,
-                                     cut_mode=self.cut_box.isChecked(), session=self.session)
+        thread = DownloadQueueThread(self, self.download_queue, self.selected, self.download_folder, self.addon,
+                                     cut_mode=self.cut_box.isChecked(), delete_after=self.cut_clear.isChecked(),
+                                     session=self.session)
         thread.init.connect(lambda: self.download_info.setText('Инициализация загрузки...'))
         thread.init_cut.connect(lambda: self.download_info.setText('Инициализация нарезки...'))
         thread.init_chapter[str].connect(lambda x: self.download_info.setText(f'Инициализация загрузки, Глава {x}...'))
