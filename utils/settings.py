@@ -14,5 +14,5 @@ class Settings:
 
     endpoint = 'https://api.remanga.org/api/titles/chapters/'
 
-    VERSION = 1.0
+    VERSION = '1.0.2'
     TITLE = 'ReManga parser'

@@ -1,3 +1,5 @@
+import logging
+
 import requests
 from PyQt5.QtCore import QObject
 
@@ -17,13 +19,17 @@ class DownloadThread(QObject):
             if response.status_code == 200:
                 self.write(response.content)
             else:
+                logging.error(f'{int(self.num) + 1}.jpg - status code wrong: {response.status_code}')
                 raise Exception
         except:
             self.error()
 
     def error(self):
-        with open(f'{self.save_to}/{int(self.num) + 1}_error.jpg'):
-            pass
+        try:
+            with open(f'{self.save_to}/{int(self.num) + 1}_error.jpg'):
+                pass
+        except Exception as e:
+            logging.error(f'{int(self.num) + 1}.jpg - download failed, {e}')
 
     def write(self, content):
         with open(f'{self.save_to}/{int(self.num) + 1}.jpg', 'wb') as out:
