@@ -26,8 +26,8 @@ class DownloadThread(QObject):
 
     def error(self):
         try:
-            with open(f'{self.save_to}/{int(self.num) + 1}_error.jpg'):
-                pass
+            with open(f'{self.save_to}/{int(self.num) + 1}_error.jpg', 'w'):
+                logging.error(f'{int(self.num) + 1}.jpg - download failed')
         except Exception as e:
             logging.error(f'{int(self.num) + 1}.jpg - download failed, {e}')
 
