@@ -127,4 +127,7 @@ class DownloadQueueThread(QThread):
                                 os.remove(item + f'/{image}')
                             except Exception as e:
                                 continue
+                    for image in os.listdir(item + '/cut'):
+                        shutil.copy2(item + f'/cut/{image}', item)
+                    shutil.rmtree(item + '/cut')
         self.done.emit()
