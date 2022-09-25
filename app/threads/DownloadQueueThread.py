@@ -48,7 +48,7 @@ class DownloadQueueThread(QThread):
 
             links = []
             try:
-                response = self.session.get(Settings.endpoint + f'/{item[0]}').json()
+                response = self.session.get(Settings.endpoint + f'{item[0]}').json()
                 for i in response.get('content').get('pages'):
                     if isinstance(i, list):
                         for j in i:
