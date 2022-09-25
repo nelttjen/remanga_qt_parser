@@ -37,11 +37,12 @@ class DownloadQueueThread(QThread):
 
     def run(self) -> None:
         self.init.emit()
-        cur_folder = self.folder + f'/{self.title_name.replace(" ", "_").lower()}_{self.selected}'
+        cur_folder = self.folder + f'/{self.selected}'
         os.mkdir(cur_folder) if not os.path.exists(cur_folder) else None
+
         for item in self.queue:
             self.init_chapter.emit(str(item[1]))
-            item_folder = f'{cur_folder}/{item[1]}_{self.title_name.replace(" ", "_").lower()}'
+            item_folder = f'{cur_folder}/{item[1]}'
             shutil.rmtree(item_folder) if os.path.exists(item_folder) else None
             os.mkdir(item_folder)
             self.folders.append(item_folder)
