@@ -5,7 +5,7 @@ import requests
 
 from PyQt5 import uic
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QMainWindow, QFileDialog
+from PyQt5.QtWidgets import QMainWindow, QFileDialog, QLineEdit
 
 from . import show_error, show_info, SelectChapters
 from .threads import DownloadQueueThread
@@ -36,6 +36,10 @@ class Window(QMainWindow):
 
         self.download_queue = None
         self.is_running = False
+
+        self.key_input = QLineEdit(self)
+        self.key_input.setPlaceholderText('Bearer Token')
+        self.key_input.setGeometry(400, 25, 200, 25)
 
     def init_search(self):
         self.items = self.th.get_info_for_view()
@@ -113,7 +117,7 @@ class Window(QMainWindow):
         self.is_running = True
         thread = DownloadQueueThread(self, self.download_queue, self.selected, self.download_folder, self.addon,
                                      cut_mode=self.cut_box.isChecked(), delete_after=self.cut_clear.isChecked(),
-                                     session=self.session)
+                                     session=self.session, key=self.key_input.text())
         thread.init.connect(lambda: self.download_info.setText('Инициализация загрузки...'))
         thread.init_cut.connect(lambda: self.download_info.setText('Инициализация нарезки...'))
         thread.init_chapter[str].connect(lambda x: self.download_info.setText(f'Инициализация загрузки, Глава {x}...'))
